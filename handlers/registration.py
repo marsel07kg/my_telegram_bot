@@ -32,6 +32,15 @@ async def registration_start(call: types.CallbackQuery,
     )
     await state.set_state(RegistrationStates.nickname)
 
+@router.callback_query(lambda call: call.data == "update_profile")
+async def registration_restart(call: types.CallbackQuery,
+                                   state: FSMContext):
+    await bot.send_message(
+        chat_id=call.from_user.id,
+        text="Send me ur Nickname, please!"
+    )
+    await state.set_state(RegistrationStates.nickname)
+
 
 @router.message(RegistrationStates.nickname)
 async def process_nickname(message: types.Message,
@@ -101,7 +110,49 @@ async def process_photo(message: types.Message,
     data = await state.get_data()
 
     photo = FSInputFile('media/' + file_path)
-    try:
+
+    profile = await db.execute_query(
+        query=sql_queries.SELECT_PROFILE_QUERY,
+        params=(
+            message.from_user.id,
+        ),
+        fetch='one')
+
+
+    if profile:
+        await db.execute_query(
+            query=sql_queries.UPDATE_PROFILE_QUERY,
+            params=(
+                data['nickname'],
+                data['bio'],
+                'media/' + file_path,
+                message.from_user.id,
+            ),
+            fetch='none'
+        )
+        await bot.send_message(
+            chat_id=message.from_user.id,
+            text="U have re-registered successfully 🍾🎉"
+        )
+    else:
+        await db.execute_query(
+            query=sql_queries.INSERT_PROFILE_QUERY,
+            params=(
+                None,
+                message.from_user.id,
+                data['nickname'],
+                data['password'],
+                data['data_of_birthday'],
+                data['bio'],
+                'media/' + file_path,
+            ),
+            fetch='none'
+        )
+        await bot.send_message(
+            chat_id=message.from_user.id,
+            text="U have re-registered successfully 🍾🎉"
+        )
+    # try:
         await db.execute_query(
             query=sql_queries.INSERT_PROFILE_QUERY,
             params=(
@@ -116,12 +167,21 @@ async def process_photo(message: types.Message,
             ),
             fetch='none'
         )
-    except sqlite3.IntegrityError:
-        await bot.send_message(
-            chat_id=message.from_user.id,
-            text="U have registered before "
+    # except sqlite3.IntegrityError:
+    #     await bot.send_message(
+    #         chat_id=message.from_user.id,
+    #         text="U have registered before "
+    #     )
+    #     return
+
+    await bot.send_photo(
+        chat_id=message.from_user.id,
+        photo=photo,
+        caption=PROFILE_TEXT.format(
+            nickname=data['nickname'],
+            bio=data['bio'],
         )
-        return
+    )
 
     await bot.send_photo(
         chat_id=message.from_user.id,
