@@ -98,7 +98,7 @@ async def view_balance_list(call: types.CallbackQuery,
         )
         await bot.send_message(
             chat_id=call.from_user.id,
-            text=f"list who join with your reference link: {reference_user}"
+            text=f"list who join with your reference link: \n{reference_user}"
         )
     else:
         await bot.send_message(
