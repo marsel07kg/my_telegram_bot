@@ -124,6 +124,8 @@ async def process_photo(message: types.Message,
             query=sql_queries.UPDATE_PROFILE_QUERY,
             params=(
                 data['nickname'],
+                data['password'],
+                data['data_of_birthday'],
                 data['bio'],
                 'media/' + file_path,
                 message.from_user.id,

@@ -13,7 +13,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import FSInputFile
 
 from config import bot, ADMIN_ID, MEDIA_PATH
-from const import USER_PROFILE, DELETE_PROFILE
+from const import USER_PROFILE, DELETE_PROFILE, PROFILE_TEXT
 from database import sql_queries
 from database.a_db import AsyncDatabase
 from keyboards.like_dislike import like_dislike_keyboard
@@ -34,18 +34,24 @@ async def random_profiles_call(call: types.CallbackQuery,
         fetch='one'
     )
     print(profile)
-    photo = types.FSInputFile(profile["PHOTO"])
-    await bot.send_photo(
-        chat_id=call.from_user.id,
-        photo=photo,
-        caption=USER_PROFILE.format(
-            nickname=profile['NICKNAME'],
-            password=profile['PASSWORD'],
-            data_of_birthday=profile['DATA_OF_BIRTHDAY'],
-            bio=profile['BIO'],
-        ),
-        reply_markup=await my_profile_keyboard()
-    )
+    if profile:
+        photo = types.FSInputFile(profile["PHOTO"])
+        await bot.send_photo(
+            chat_id=call.from_user.id,
+            photo=photo,
+            caption=PROFILE_TEXT.format(
+                nickname=profile['NICKNAME'],
+                password=profile['PASSWORD'],
+                data_of_birthday=profile['DATA_OF_BIRTHDAY'],
+                bio=profile['BIO'],
+            ),
+            reply_markup=await my_profile_keyboard()
+        )
+    else:
+        await bot.send_message(
+            chat_id=call.from_user.id,
+            text="U have not registered ‼️"
+        )
 
 @router.callback_query(lambda call: call.data == "delete_profile")
 async def delete_profiles_call(call: types.CallbackQuery,
