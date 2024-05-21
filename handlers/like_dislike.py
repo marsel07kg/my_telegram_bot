@@ -34,7 +34,6 @@ async def random_profiles_call(call: types.CallbackQuery,
     if profiles:
         random_profile = random.choice(profiles)
         print(profiles)
-        print(random_profile)
         photo = types.FSInputFile(random_profile["PHOTO"])
         await bot.send_photo(
             chat_id=call.from_user.id,

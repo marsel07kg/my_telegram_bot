@@ -13,7 +13,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import FSInputFile
 
 from config import bot, ADMIN_ID, MEDIA_PATH
-from const import USER_PROFILE, DELETE_PROFILE, PROFILE_TEXT
+from const import USER_PROFILE, PROFILE_TEXT
 from database import sql_queries
 from database.a_db import AsyncDatabase
 from keyboards.like_dislike import like_dislike_keyboard

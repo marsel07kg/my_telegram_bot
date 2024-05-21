@@ -92,10 +92,6 @@ async def view_balance_list(call: types.CallbackQuery,
         fetch='all'
     )
     if reference_user:
-        await db.execute_query(
-            query=sql_queries.CREATE_TABLE_REFERENCE_QUERY,
-            fetch='all'
-        )
         await bot.send_message(
             chat_id=call.from_user.id,
             text=f"list who join with your reference link: \n{reference_user}"

@@ -4,3 +4,6 @@ __pycache__
 .env
 db.sqlite3
 media
+cache
+handlers/wallet.py
+handlers/donate_sistem.py
