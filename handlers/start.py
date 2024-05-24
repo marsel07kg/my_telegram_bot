@@ -9,7 +9,8 @@ from const import START_MENU_TEXT
 from database import sql_queries
 from database.a_db import AsyncDatabase
 from keyboards.start import start_menu_keyboard
-from scraper.news_scraper import NewsScraper
+from scraper.async_news_scraper import AsyncNewsScraper
+from scraper.async_vc import AsyncVCScraper
 
 router = Router()
 
@@ -115,10 +116,10 @@ async def admin_start_menu(message: types.Message,
 @router.callback_query(lambda call: call.data == "news")
 async def latest_news_links(call: types.CallbackQuery,
                             db=AsyncDatabase()):
-    scraper = NewsScraper()
-    data = scraper.scrape_data()
-    for news in data:
+    scraper = AsyncVCScraper()
+    data = asyncio(scraper.get_pages())
+    for videocard in data:
         await bot.send_message(
             chat_id=call.message.chat.id,
-            text="https://www.prnewswire.com" + news
+            text="https://www.prnewswire.com" + videocard
         )

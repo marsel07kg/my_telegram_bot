@@ -5,5 +5,5 @@ __pycache__
 db.sqlite3
 media
 cache
-handlers/wallet.py
-handlers/donate_sistem.py
+handlers//wallet.py donate_sistem.py
+
