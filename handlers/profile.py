@@ -55,7 +55,6 @@ async def random_profiles_call(call: types.CallbackQuery,
 
 @router.callback_query(lambda call: call.data == "delete_profile")
 async def delete_profiles_call(call: types.CallbackQuery,
-
                                db=AsyncDatabase()):
     await db.execute_query(
         query=sql_queries.DEL_MY_PROFILE,

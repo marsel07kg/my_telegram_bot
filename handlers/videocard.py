@@ -13,7 +13,7 @@ router = Router()
 
 @router.callback_query(lambda call: call.data == "video_card")
 async def video_card_links(call: types.CallbackQuery,):
-    scraper = ()
+    scraper = VideoCardScraper()
     data = scraper.scrape_data()
     for video_card in data:
         await bot.send_message(
