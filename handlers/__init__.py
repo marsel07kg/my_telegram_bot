@@ -11,7 +11,7 @@ def setup_routers() -> Router:
         donate,
         wallet,
         donate_sistem,
-        videocard,
+
     )
     router = Router()
     router.include_router(start.router)
@@ -22,6 +22,6 @@ def setup_routers() -> Router:
     router.include_router(wallet.router)
     router.include_router(donate.router)
     router.include_router(donate_sistem.router)
-    router.include_router(videocard.router)
+    # router.include_router(videocard.router)
 
     return router
